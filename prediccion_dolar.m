@@ -45,7 +45,16 @@ neuronas = [10 10];
 net = feedforwardnet(neuronas);
 
 %Configuraciones de la red
+%Usamos todo el dataset provisto a la red para entrenar dado que los de
+%validación y test los tenemos en otras variables y matlab no permite
+%proveerlos a través de este toolbox
 net.divideParam.trainRatio = 1;
+%Configuraciones de las capas
+% Coloque en la consola help nntransfer para ver las funciones que hay
+net.layers{1}.transferFcn = "tansig";
+net.layers{2}.transferFcn = "tansig";
+%LA ULTIMA CAPA SIEMPRE ES LA DE SALIDA
+net.layers{3}.transferFcn = "poslin";
 %FIN Configuraciones de la red
 
 %Entrenamiento
