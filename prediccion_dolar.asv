@@ -39,21 +39,17 @@ shuffled_dataset = shuffle_dataset(dataset);
 
 [X_train,Y_train,X_test,Y_test,X_val,Y_val] = split_dataset(porcentaje_test,porcentaje_validacion,dataset);
 
-
-%Generación de la red
-neuronas = [10 10];
-net = feedforwardnet(neuronas);
-
-%Configuraciones de la red
-net.divideParam.trainRatio = 1;
-%FIN Configuraciones de la red
-
-%Entrenamiento
-[net,errTrain,errVal,errTest] = entrenar(net,X_train,Y_train,X_test,Y_test,X_val,Y_val);
-%ESPECIFICO DE ESTE PROBLEMA PARA VISUALIZACIÓN
 Fechas_train = preciodolarcolombia.Fechas(1:round(filas*(1-porcentaje_validacion-porcentaje_test)));
 Fechas_test = preciodolarcolombia.Fechas(round(filas*(1-porcentaje_validacion-porcentaje_test))-1:round(filas*(1-porcentaje_test)));
 Fechas_val = preciodolarcolombia.Fechas(round(filas*(1-porcentaje_test))-1:end);
+
+%Generación de la red
+net = feedforwardnet([10 10]);
+
+%Configuraciones de la red
+net.divideParam.trainRatio = 1;
+%Entrenamiento
+net = train(net,X_train',Y_train');
 salidas_pred = sim(net,X_train')';
 view(net);
 figure,
@@ -65,4 +61,3 @@ plot(Fechas_test,salidas_pred);
 salidas_pred = sim(net,X_val');
 plot(Fechas_val,salidas_pred)
 legend("Precio del dolar real", "Precio del dolar predicho en entrenamiento", "Precio del dolar predicho en test", "Precio del dolar predicho en validación");
-%FIN VISUALIZACIÓN
