@@ -5,8 +5,8 @@ function [net,errTrain,errVal,errTest] = entrenar(net,X_train,Y_train,X_test,Y_t
     salidas_pred = sim(net,X_train')';
     errTrain = immse(salidas_pred,Y_train);
     salidas_pred = sim(net,X_test')';
-    errVal = immse(salidas_pred,Y_test);
+    errTest = immse(salidas_pred,Y_test);
     salidas_pred = sim(net,X_val')';
-    errTest = immse(salidas_pred,Y_val);
+    errVal = immse(salidas_pred,Y_val);
 end
 

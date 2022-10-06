@@ -30,9 +30,9 @@ for i=1:1:length(preciodolarcolombia.Precio)
     dataset(i,:) = [valor_4 valor_3 valor_2 valor_1 salida];
 end
 %% Preparación del dataset
+[filas, columnas] = size(dataset);
 porcentaje_validacion = 0.2;
 porcentaje_test = 0.1;
-[filas, columnas] = size(dataset);
 
 % Le hacemos shuffle al dataset
 shuffled_dataset = shuffle_dataset(dataset);
@@ -41,8 +41,10 @@ shuffled_dataset = shuffle_dataset(dataset);
 
 
 %Generación de la red
-neuronas = [10 10];
-net = feedforwardnet(neuronas);
+capas = 2;
+neuronas = 10;
+netarch = neuronas*ones(1,capas);
+net = feedforwardnet(netarch);
 
 %Configuraciones de la red
 %Usamos todo el dataset provisto a la red para entrenar dado que los de
@@ -51,10 +53,12 @@ net = feedforwardnet(neuronas);
 net.divideParam.trainRatio = 1;
 %Configuraciones de las capas
 % Coloque en la consola help nntransfer para ver las funciones que hay
-net.layers{1}.transferFcn = "tansig";
-net.layers{2}.transferFcn = "tansig";
+funcion_capas_ocultas = "tansig";
+for i = 1:1:capas
+    net.layers{i}.transferFcn = funcion_capas_ocultas;
+end
 %LA ULTIMA CAPA SIEMPRE ES LA DE SALIDA
-net.layers{3}.transferFcn = "poslin";
+net.layers{capas+1}.transferFcn = "purelin";
 %FIN Configuraciones de la red
 
 %Entrenamiento
@@ -70,6 +74,7 @@ plot(preciodolarcolombia.Fechas,preciodolarcolombia.Precio);
 hold on;
 plot(Fechas_train,salidas_pred);
 salidas_pred = sim(net,X_test')';
+NASH = NSE(Y_test',salidas_pred');
 plot(Fechas_test,salidas_pred);
 salidas_pred = sim(net,X_val');
 plot(Fechas_val,salidas_pred)
