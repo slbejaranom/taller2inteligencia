@@ -1,7 +1,7 @@
 clear,
 close all,
 clc,
-rng("shuffle");                                                                                                                                           
+rng(5);                                                                                                                                           
 %% Generación del dataset
 load("precio_dolar.mat");
 dataset = zeros(length(preciodolarcolombia.Precio),5);
@@ -41,8 +41,8 @@ shuffled_dataset = shuffle_dataset(dataset);
 
 
 %Generación de la red
-capas = 2;
-neuronas = 10;
+capas = 1;
+neuronas = 30;
 netarch = neuronas*ones(1,capas);
 net = feedforwardnet(netarch);
 
@@ -53,7 +53,7 @@ net = feedforwardnet(netarch);
 net.divideParam.trainRatio = 1;
 %Configuraciones de las capas
 % Coloque en la consola help nntransfer para ver las funciones que hay
-funcion_capas_ocultas = "tansig";
+funcion_capas_ocultas = "poslin";
 for i = 1:1:capas
     net.layers{i}.transferFcn = funcion_capas_ocultas;
 end
